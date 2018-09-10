@@ -1,6 +1,8 @@
 # ng2-input-validator
 This is the Reactive Form wrapper to Angular 6 FormGroup (https://angular.io/api/forms/FormGroup) with support validation message.
 
+![Example usage](https://user-images.githubusercontent.com/3649077/45321511-d2466600-b545-11e8-8e44-4e773f5dc701.gif)
+
 # Installation
 Install the ng2-input-validator module and add it to dependencies in package.json:
 ```
