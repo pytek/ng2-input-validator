@@ -1,0 +1,31 @@
+<div>
+  <form [formGroup]="form.formGroup">
+    <div>
+      <label for="mark">Mark</label>
+      <input type="text" formControlName="mark">
+      <ng2iv-validator [control]="form.getByPath('mark')" [messages]="form.messages"></ng2iv-validator>
+    </div>
+    <div>
+      <label for="model">Model</label>
+      <input type="text" formControlName="model">
+      <ng2iv-validator [control]="form.getByPath('model')" [messages]="form.messages"></ng2iv-validator>
+    </div>
+    <div>
+      <div>TAGS:</div>
+      <ng2iv-validator [control]="tags" [messages]="form.messages"></ng2iv-validator>
+      <div>
+        <ul formArrayName="tags" *ngFor="let tag of tags.controls; let i = index" class="col-md-12">
+          <li [formGroupName]="i">
+            <input type="text" formControlName="text">
+            <ng2iv-validator [control]="tag.get('text')" [messages]="form.messages"></ng2iv-validator>
+            <span (click)="removeTag(i)">X</span>
+          </li>
+        </ul>
+        <button type="button" (click)="addTag()">Add tag</button>
+      </div>
+    </div>
+    <div>
+      <button type="submit" (click)="onSubmit()">Submit</button>
+    </div>
+  </form>
+</div>
