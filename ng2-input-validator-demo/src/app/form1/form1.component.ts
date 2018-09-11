@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Validators, FormGroup, FormArray } from '@angular/forms';
-import { Ng2Form } from 'projects/ng2-input-validator/src/lib/ng2-form';
+import { Ng2Form } from 'ng2-input-validator';
 
 @Component({
   selector: 'ng2ivd-form1',
