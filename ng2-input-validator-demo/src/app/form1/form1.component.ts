@@ -31,11 +31,8 @@ export class Form1Component implements OnInit {
   onSubmit() {
     this.form.validate();
 
-    // if (this.form.valid) {
-    //   alert(`form 1 is valid. Model: ${JSON.stringify(this.form.value)}`);
-    // } else {
-    //   alert('form 1 is invalid');
-    // }
+    if (this.form.valid) {
+    }
   }
 
   private buildForm() {

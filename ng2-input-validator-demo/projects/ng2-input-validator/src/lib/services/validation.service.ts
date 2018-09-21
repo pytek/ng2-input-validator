@@ -132,6 +132,8 @@ export class ValidationService {
   }
 
   validateAllControls(formGroup: FormGroup) {
+    formGroup.markAsTouched({ onlySelf: true });
+
     Object.keys(formGroup.controls).forEach((controlName) => {
       const control = formGroup.get(controlName);
 
