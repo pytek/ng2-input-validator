@@ -2,7 +2,7 @@
 
 This is the Reactive Form wrapper to Angular 6 FormGroup (https://angular.io/api/forms/FormGroup) with support validation message.
 
-![Example usage](https://user-images.githubusercontent.com/3649077/45321511-d2466600-b545-11e8-8e44-4e773f5dc701.gif)
+![Example usage](https://user-images.githubusercontent.com/3649077/45872579-aa9a9d80-bd90-11e8-905f-9ff790dc66c2.gif)
 
 # Installation
 
