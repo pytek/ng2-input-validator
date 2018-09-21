@@ -5,14 +5,17 @@ import {
   FormControl,
   FormGroup
 } from '@angular/forms';
+
 import { FormMessagesModel } from '../models/form-messages.model';
-import { defaultValidationMessages } from '../lang/validation-messages';
+import { ValidationTranslateService } from './validation-translate.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValidationService {
   private customMessages: FormMessagesModel;
+
+  constructor(private validationTranslateService: ValidationTranslateService) {}
 
   setCustomMessages(messages: FormMessagesModel) {
     this.customMessages = Object.assign({}, this.customMessages, messages);
@@ -166,8 +169,13 @@ export class ValidationService {
       return this.customMessages[ruleName];
     }
 
-    if (defaultValidationMessages[ruleName]) {
-      return defaultValidationMessages[ruleName];
+    const langTranslation = this.validationTranslateService.getTranslation(
+      ruleName
+    );
+
+    if (langTranslation) {
+      return this.validationTranslateService.getTranslation(ruleName)
+        .translation;
     }
 
     return ruleName;

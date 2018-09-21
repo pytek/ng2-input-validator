@@ -1,0 +1,9 @@
+{
+  "VALIDATIONS": {
+    "required": "This field is required. Please provide value."
+  },
+  "FORM1": {
+    "tags_required": "Add at least one tag",
+    "tags_unique": "Tags should be unique"
+  }
+}

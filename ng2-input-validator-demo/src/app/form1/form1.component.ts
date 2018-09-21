@@ -1,20 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Validators, FormGroup, FormArray } from '@angular/forms';
+
+import { TranslateService } from '@ngx-translate/core';
 import { Ng2Form } from 'projects/ng2-input-validator/src/lib/ng2-form';
+import { TagValidator } from './tag-validator';
 
 @Component({
   selector: 'ng2ivd-form1',
   templateUrl: './form1.component.html',
-  styleUrls: ['./form1.component.css']
+  styleUrls: ['./form1.component.scss'],
+  providers: [Ng2Form]
 })
 export class Form1Component implements OnInit {
-  form: Ng2Form = new Ng2Form();
-
-  constructor() {}
+  constructor(
+    public form: Ng2Form,
+    private translateService: TranslateService
+  ) {}
 
   ngOnInit() {
     this.buildForm();
+
+    this.initTranslations();
+    this.translateService.onLangChange.subscribe(() => this.initTranslations());
   }
 
   addTag(): void {
@@ -24,27 +31,22 @@ export class Form1Component implements OnInit {
   onSubmit() {
     this.form.validate();
 
-    if (this.form.valid) {
-      alert(`form 1 is valid. Model: ${JSON.stringify(this.form.value)}`);
-    } else {
-      alert('form 1 is invalid');
-    }
+    // if (this.form.valid) {
+    //   alert(`form 1 is valid. Model: ${JSON.stringify(this.form.value)}`);
+    // } else {
+    //   alert('form 1 is invalid');
+    // }
   }
 
   private buildForm() {
     this.form.group({
       mark: [null, Validators.required],
       model: [null, Validators.required],
+      motor: [null, Validators.required],
       tags: this.form.array(
         [this.buildTagsForm('text tag'), this.buildTagsForm(null)],
-        Validators.required
+        [Validators.required, TagValidator.unique]
       )
-    });
-
-    this.form.setValidationMessages({
-      tags: {
-        required: 'Add at least one tag'
-      }
     });
   }
 
@@ -60,5 +62,18 @@ export class Form1Component implements OnInit {
 
   removeTag(i: number): void {
     this.tags.removeAt(i);
+  }
+
+  private initTranslations() {
+    this.translateService
+      .get(['FORM1.tags_required', 'FORM1.tags_unique'])
+      .subscribe((translations) => {
+        this.form.setValidationMessages({
+          tags: {
+            required: translations['FORM1.tags_required'],
+            uniqueTags: translations['FORM1.tags_unique']
+          }
+        });
+      });
   }
 }

@@ -1,31 +1,53 @@
-<div>
-  <form [formGroup]="form.formGroup">
-    <div>
-      <label for="mark">Mark</label>
-      <input type="text" formControlName="mark">
-      <ng2iv-validator [control]="form.getByPath('mark')" [messages]="form.messages"></ng2iv-validator>
+<h2>Example Form 1</h2>
+
+<form [formGroup]="form.formGroup">
+  <div class="form-group row">
+    <label for="mark" class="col-sm-2 col-form-label">Mark</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="mark" placeholder="Mark" formControlName="mark">
+      <ng2iv-validator [control]="form.getByPath('mark')"></ng2iv-validator>
     </div>
-    <div>
-      <label for="model">Model</label>
-      <input type="text" formControlName="model">
-      <ng2iv-validator [control]="form.getByPath('model')" [messages]="form.messages"></ng2iv-validator>
+  </div>
+  <div class="form-group row">
+    <label for="model" class="col-sm-2 col-form-label">Model</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="model" placeholder="Model" formControlName="model">
+      <ng2iv-validator [control]="form.getByPath('model')"></ng2iv-validator>
     </div>
-    <div>
-      <div>TAGS:</div>
-      <ng2iv-validator [control]="tags" [messages]="form.messages"></ng2iv-validator>
-      <div>
-        <ul formArrayName="tags" *ngFor="let tag of tags.controls; let i = index" class="col-md-12">
-          <li [formGroupName]="i">
-            <input type="text" formControlName="text">
-            <ng2iv-validator [control]="tag.get('text')" [messages]="form.messages"></ng2iv-validator>
-            <span (click)="removeTag(i)">X</span>
-          </li>
-        </ul>
-        <button type="button" (click)="addTag()">Add tag</button>
+  </div>
+  <div class="form-group row">
+    <label for="model" class="col-sm-2 col-form-label">Motor</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="motor" placeholder="Motor" formControlName="motor">
+      <ng2iv-validator [control]="form.getByPath('motor')"></ng2iv-validator>
+    </div>
+  </div>
+  <fieldset class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2 pt-0">Tags</legend>
+      <div class="col-sm-10">
+        <ng2iv-validator [control]="tags"></ng2iv-validator>
+        <div formArrayName="tags" *ngFor="let tag of tags.controls; let i = index" class="col-md-12">
+          <div [formGroupName]="i">
+            <div class="d-flex bd-highlight">
+              <div class="p-2 w-100 bd-highlight">
+                <input type="text" class="form-control" id="model-{{i}}" placeholder="Tag" formControlName="text">
+                <ng2iv-validator [control]="tag.get('text')"></ng2iv-validator>
+              </div>
+              <div class="p-2 flex-shrink-1 bd-highlight">
+                <span (click)="removeTag(i)"><i class="fa fa-trash action"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" (click)="addTag()">Add tag</button>
       </div>
     </div>
-    <div>
-      <button type="submit" (click)="onSubmit()">Submit</button>
+  </fieldset>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
     </div>
-  </form>
-</div>
+  </div>
+</form>
