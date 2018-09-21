@@ -112,37 +112,37 @@ HTML
 ```
 <h2>Example Form 1</h2>
 <div class="alert alert-warning" role="alert" *ngIf="form.touched && form.invalid">
-  Form is invalid
+  {{'COMMON.FormIsInvalid' | translate }}
 </div>
 <div class="alert alert-success" role="alert" *ngIf="form.touched && form.valid">
-  Form is valid. Form data: {{ form.value | json }}
+  {{'COMMON.FormIsValid' | translate }}. {{'COMMON.FormData' | translate }}: {{ form.value | json }}
 </div>
 
 <form [formGroup]="form.formGroup">
   <div class="form-group row">
-    <label for="mark" class="col-sm-2 col-form-label">Mark</label>
+    <label for="mark" class="col-sm-2 col-form-label" translate>FORM1.Mark</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="mark" placeholder="Mark" formControlName="mark">
+      <input type="text" class="form-control" id="mark" placeholder="{{ 'FORM1.Mark' | translate }}" formControlName="mark">
       <ng2iv-validator [control]="form.getByPath('mark')"></ng2iv-validator>
     </div>
   </div>
   <div class="form-group row">
-    <label for="model" class="col-sm-2 col-form-label">Model</label>
+    <label for="model" class="col-sm-2 col-form-label" translate>FORM1.Model</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="model" placeholder="Model" formControlName="model">
+      <input type="text" class="form-control" id="model" placeholder="{{ 'FORM1.Model' | translate }}" formControlName="model">
       <ng2iv-validator [control]="form.getByPath('model')"></ng2iv-validator>
     </div>
   </div>
   <div class="form-group row">
-    <label for="motor" class="col-sm-2 col-form-label">Motor</label>
+    <label for="motor" class="col-sm-2 col-form-label" translate>FORM1.Motor</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="motor" placeholder="Motor" formControlName="motor">
+      <input type="text" class="form-control" id="motor" placeholder="{{ 'FORM1.Motor' | translate }}" formControlName="motor">
       <ng2iv-validator [control]="form.getByPath('motor')"></ng2iv-validator>
     </div>
   </div>
   <fieldset class="form-group">
     <div class="row">
-      <legend class="col-form-label col-sm-2 pt-0">Tags</legend>
+      <legend class="col-form-label col-sm-2 pt-0" translate>FORM1.Tags</legend>
       <div class="col-sm-10">
         <ng2iv-validator [control]="tags"></ng2iv-validator>
         <div formArrayName="tags" *ngFor="let tag of tags.controls; let i = index" class="col-md-12">
@@ -159,13 +159,13 @@ HTML
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary" (click)="addTag()">Add tag</button>
+        <button type="button" class="btn btn-secondary" (click)="addTag()" translate>FORM1.AddTag</button>
       </div>
     </div>
   </fieldset>
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()" translate>COMMON.Submit</button>
     </div>
   </div>
 </form>
