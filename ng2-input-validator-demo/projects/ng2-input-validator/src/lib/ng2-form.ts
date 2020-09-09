@@ -5,9 +5,9 @@ import {
   FormGroup,
   ValidationErrors,
   ValidatorFn,
-  AsyncValidatorFn
+  AsyncValidatorFn,
+  FormArray,
 } from '@angular/forms';
-import { FormArray, FormHooks } from '@angular/forms/src/model';
 
 import { Observable } from 'rxjs';
 
@@ -195,7 +195,7 @@ export class Ng2Form {
     return this.form.statusChanges;
   }
 
-  get updateOn(): FormHooks {
+  get updateOn(): any {
     return this.form.updateOn;
   }
 
