@@ -1,0 +1,23 @@
+{
+  "name": "ng2-input-validator",
+  "version": "10.0.1",
+  "peerDependencies": {
+    "@angular/common": "^10.0.0",
+    "@angular/core": "^10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pytek/ng2-input-validator.git"
+  },
+  "keywords": [
+    "angular",
+    "validator",
+    "reactive forms"
+  ],
+  "author": "Rafal Pytkowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pytek/ng2-input-validator/issues"
+  },
+  "homepage": "https://github.com/pytek/ng2-input-validator"
+}

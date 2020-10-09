@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+form {
+  ::placeholder {
+    font-size: 10px;
+    font-style: italic;
+  }
+
+  input.ng-touched {
+    &.ng-invalid {
+      border: 1px solid $danger;
+    }
+  }
+
+  .fa.action {
+    cursor: pointer;
+  }
+}
