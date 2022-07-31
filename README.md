@@ -1,6 +1,15 @@
 # ng2-input-validator
 
-This is the Reactive Form wrapper to Angular 10 FormGroup (https://angular.io/api/forms/FormGroup) with support validation message.
+This is the Reactive Form wrapper to Angular 2+ FormGroup (https://angular.io/api/forms/FormGroup) with support validation message.
+
+## Versions
+
+| Angular          | ng2iv-validator |
+|------------------|:---------------:|
+| >=11.0.0 <12.0.0 |      v11.x      |
+| >=10.0.0 <11.0.0 |      v10.x      |
+
+## Example Usage
 
 ![Example usage](https://user-images.githubusercontent.com/3649077/45872579-aa9a9d80-bd90-11e8-905f-9ff790dc66c2.gif)
 
