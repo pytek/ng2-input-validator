@@ -16,7 +16,7 @@ export class ValidationTranslateService {
     this.translations = Object.assign(this.translations, translations);
   }
 
-  public getTranslation(rule) {
+  public getTranslation(rule: string) {
     return this.translations.find((translation) => translation.rule === rule);
   }
 
@@ -24,7 +24,7 @@ export class ValidationTranslateService {
     Object.getOwnPropertyNames(defaultValidationMessages).forEach((rule) => {
       this.translations.push({
         rule: rule,
-        translation: defaultValidationMessages[rule],
+        translation: (defaultValidationMessages as any)[rule],
       });
     });
   }

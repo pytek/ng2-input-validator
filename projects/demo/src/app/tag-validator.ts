@@ -4,7 +4,7 @@ export class TagValidator {
   public static unique(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
-    const uniqueNames = [];
+    const uniqueNames: string[] = [];
     let isValid = true;
 
     if (control instanceof UntypedFormArray) {

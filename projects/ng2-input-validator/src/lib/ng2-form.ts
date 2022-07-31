@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
+  FormArray,
+  FormGroup,
   UntypedFormArray,
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -16,44 +18,45 @@ import { ValidationService } from './services/validation.service';
 
 @Injectable()
 export class Ng2Form {
-  private form: UntypedFormGroup;
+  private form: UntypedFormGroup | null = null;
 
-  constructor(private formBuilder: UntypedFormBuilder, private validationService: ValidationService) {}
+  constructor(private formBuilder: UntypedFormBuilder, private validationService: ValidationService) { }
 
-  get valueChanges(): Observable<any> {
-    return this.form.valueChanges;
+  get valueChanges(): Observable<any> | undefined {
+    return this.form?.valueChanges;
   }
 
   get value(): any {
-    return this.form.value;
+    return this.form?.value;
   }
 
-  get formGroup(): UntypedFormGroup {
+  get formGroup(): FormGroup<any> {
+    if(!this.form) throw new Error('form is not initalized!');
     return this.form;
   }
 
-  getByPath(path: Array<string | number> | string): AbstractControl | null {
-    return this.form.get(path);
+  getByPath(path: Array<string | number> | string): AbstractControl<any, any> | null {
+    return this.form?.get(path) ?? null;
   }
 
-  get controls(): { [key: string]: AbstractControl } {
-    return this.form.controls;
+  get controls(): { [key: string]: AbstractControl<any, any> } | undefined {
+    return this.form?.controls;
   }
 
-  getFormGroupInsideArray(arrayName: string, index: number): UntypedFormGroup {
-    return (this.form.controls[arrayName] as UntypedFormArray).controls[index] as UntypedFormGroup;
+  getFormGroupInsideArray(arrayName: string, index: number): UntypedFormGroup | undefined {
+    return (this.form?.controls[arrayName] as UntypedFormArray).controls[index] as UntypedFormGroup;
   }
 
-  getControlsInArray(arrayName: string, index: number): { [key: string]: AbstractControl } {
-    return this.getFormGroupInsideArray(arrayName, index).controls;
+  getControlsInArray(arrayName: string, index: number): { [key: string]: AbstractControl } | undefined {
+    return this.getFormGroupInsideArray(arrayName, index)?.controls;
   }
 
   get invalid(): boolean {
-    return this.form.invalid;
+    return this.form?.invalid ?? false;
   }
 
   get valid(): boolean {
-    return this.form.valid;
+    return this.form?.valid ?? false;
   }
 
   setValidationMessages(messages: FormMessagesModel): void {
@@ -82,42 +85,43 @@ export class Ng2Form {
       emitEvent?: boolean;
     }
   ): void {
-    this.form.reset(value, options);
+    this.form?.reset(value, options);
   }
 
   resetControl(controlName: string, value?: any): void {
-    this.form.get(controlName).reset(value);
+    this.form?.get(controlName)?.reset(value);
   }
 
   validate(): void {
-    this.validationService.validateAllControls(this.form);
+    if (this.form)
+      this.validationService.validateAllControls(this.form);
   }
 
   patchValue(
     value: { [key: string]: any },
     options?: { onlySelf?: boolean; emitEvent?: boolean }
   ): void {
-    this.form.patchValue(value, options);
+    this.form?.patchValue(value, options);
   }
 
   registerControl(name: string, control: AbstractControl): AbstractControl {
-    return this.form.registerControl(name, control);
+    return this.form?.registerControl(name, control);
   }
 
   addControl(name: string, control: AbstractControl): void {
-    this.form.addControl(name, control);
+    this.form?.addControl(name, control);
   }
 
   removeControl(name: string): void {
-    this.form.removeControl(name);
+    this.form?.removeControl(name);
   }
 
   setControl(name: string, control: AbstractControl): void {
-    this.form.setControl(name, control);
+    this.form?.setControl(name, control);
   }
 
-  contains(controlName: string): boolean {
-    return this.form.contains(controlName);
+  contains(controlName: string): boolean | undefined {
+    return this.form?.contains(controlName);
   }
 
   setValue(
@@ -129,111 +133,111 @@ export class Ng2Form {
       emitEvent?: boolean;
     }
   ): void {
-    this.form.setValue(value, options);
+    this.form?.setValue(value, options);
   }
 
   getRawValue(): any {
-    return this.form.getRawValue();
+    return this.form?.getRawValue();
   }
 
-  get parent(): UntypedFormGroup | UntypedFormArray {
-    return this.form.parent;
+  get parent(): FormGroup<any> | FormArray<any> | null | undefined {
+    return this.form?.parent;
   }
 
-  get status(): string {
-    return this.form.status;
+  get status(): string | undefined {
+    return this.form?.status;
   }
 
-  get pending(): boolean {
-    return this.form.pending;
+  get pending(): boolean | undefined {
+    return this.form?.pending;
   }
 
-  get disabled(): boolean {
-    return this.form.disabled;
+  get disabled(): boolean | undefined {
+    return this.form?.disabled;
   }
 
-  get enabled(): boolean {
-    return this.form.enabled;
+  get enabled(): boolean | undefined {
+    return this.form?.enabled;
   }
 
-  get errors(): ValidationErrors | null {
-    return this.form.errors;
+  get errors(): ValidationErrors | null | undefined {
+    return this.form?.errors;
   }
 
-  get pristine(): boolean {
-    return this.form.pristine;
+  get pristine(): boolean | undefined {
+    return this.form?.pristine;
   }
 
-  get dirty(): boolean {
-    return this.form.dirty;
+  get dirty(): boolean | undefined {
+    return this.form?.dirty;
   }
 
-  get touched(): boolean {
-    return this.form.touched;
+  get touched(): boolean | undefined {
+    return this.form?.touched;
   }
 
-  get untouched(): boolean {
-    return this.form.untouched;
+  get untouched(): boolean | undefined {
+    return this.form?.untouched;
   }
 
-  get statusChanges(): Observable<any> {
-    return this.form.statusChanges;
+  get statusChanges(): Observable<any> | undefined {
+    return this.form?.statusChanges;
   }
 
   get updateOn(): any {
-    return this.form.updateOn;
+    return this.form?.updateOn;
   }
 
   setValidators(newValidator: ValidatorFn | ValidatorFn[] | null) {
-    this.form.setValidators(newValidator);
+    this.form?.setValidators(newValidator);
   }
 
   setAsyncValidators(newValidator: AsyncValidatorFn | AsyncValidatorFn[] | null): void {
-    this.form.setValidators(newValidator);
+    this.form?.setValidators(newValidator);
   }
 
   clearValidators(): void {
-    this.form.clearValidators();
+    this.form?.clearValidators();
   }
 
   clearAsyncValidators(): void {
-    this.form.clearAsyncValidators();
+    this.form?.clearAsyncValidators();
   }
 
   markAsTouched(opts?: { onlySelf?: boolean }): void {
-    this.form.markAsTouched(opts);
+    this.form?.markAsTouched(opts);
   }
 
   markAsUntouched(opts?: { onlySelf?: boolean }): void {
-    this.form.markAsUntouched(opts);
+    this.form?.markAsUntouched(opts);
   }
 
   markAsDirty(opts?: { onlySelf?: boolean }): void {
-    this.form.markAsDirty(opts);
+    this.form?.markAsDirty(opts);
   }
 
   markAsPristine(opts?: { onlySelf?: boolean }): void {
-    this.form.markAsPristine(opts);
+    this.form?.markAsPristine(opts);
   }
 
   markAsPending(opts?: { onlySelf?: boolean; emitEvent?: boolean }): void {
-    this.form.markAsPending(opts);
+    this.form?.markAsPending(opts);
   }
 
   disable(opts?: { onlySelf?: boolean; emitEvent?: boolean }): void {
-    this.form.disable(opts);
+    this.form?.disable(opts);
   }
 
   enable(opts?: { onlySelf?: boolean; emitEvent?: boolean }): void {
-    this.form.enable(opts);
+    this.form?.enable(opts);
   }
 
   setParent(parent: UntypedFormGroup | UntypedFormArray): void {
-    this.form.setParent(parent);
+    this.form?.setParent(parent);
   }
 
   updateValueAndValidity(opts?: { onlySelf?: boolean; emitEvent?: boolean }): void {
-    this.form.updateValueAndValidity(opts);
+    this.form?.updateValueAndValidity(opts);
   }
 
   setErrors(
@@ -242,18 +246,18 @@ export class Ng2Form {
       emitEvent?: boolean;
     }
   ): void {
-    this.form.setErrors(errors, opts);
+    this.form?.setErrors(errors, opts);
   }
 
-  get(path: Array<string | number> | string): AbstractControl | null {
-    return this.form.get(path);
+  get(path: Array<string | number> | string): AbstractControl | null | undefined {
+    return this.form?.get(path);
   }
 
   getError(errorCode: string, path?: string[]): any {
-    return this.form.getError(errorCode, path);
+    return this.form?.getError(errorCode, path);
   }
 
-  hasError(errorCode: string, path?: string[]): boolean {
-    return this.form.hasError(errorCode, path);
+  hasError(errorCode: string, path?: string[]): boolean | undefined {
+    return this.form?.hasError(errorCode, path);
   }
 }

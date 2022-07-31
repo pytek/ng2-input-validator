@@ -8,7 +8,7 @@ import { ValidationTranslateService } from './validation-translate.service';
   providedIn: 'root',
 })
 export class ValidationService {
-  private customMessages: FormMessagesModel;
+  private customMessages: FormMessagesModel | null = null;
 
   constructor(private validationTranslateService: ValidationTranslateService) { }
 
@@ -16,53 +16,66 @@ export class ValidationService {
     this.customMessages = Object.assign({}, this.customMessages, messages);
   }
 
-  getControlName(control: AbstractControl): string | null {
-    const formGroup = control.parent.controls;
-    return Object.keys(formGroup).find((name) => control === formGroup[name]) || null;
+  getControlName(control: AbstractControl<any, any>): string | null {
+    const formGroup = control.parent?.controls;
+    if (!formGroup) return null;
+    return Object.keys(formGroup).find((name) => control === (formGroup as any)[name]) || null;
   }
 
-  getControlNameHierarchy(names: string[], control: AbstractControl): string | null {
-    if (control.parent.parent instanceof UntypedFormArray) {
-      names.push(this.getControlName(control));
+  getControlNameHierarchy(names: string[], control: AbstractControl<any, any>): string | null | undefined {
+    if (!control) return null;
+    if (control.parent?.parent instanceof UntypedFormArray) {
+      const controlName = this.getControlName(control);
+      controlName && names.push(controlName);
       return this.getControlNameHierarchy(names, control.parent);
-    } else if (!control.parent.parent) {
-      names.push(this.getControlName(control));
+    } else if (!control.parent?.parent) {
+      const controlName = this.getControlName(control);
+      controlName && names.push(controlName);
     } else {
       return this.getControlNameHierarchy(names, control.parent);
     }
+    return null;
   }
 
-  getFullControlName(control: AbstractControl) {
-    const names = [];
+  getFullControlName(control: AbstractControl<any, any>) {
+    const names: string[] = [];
     this.getControlNameHierarchy(names, control);
     const controlName = names.reverse().join('.');
     return controlName;
   }
 
-  getControlFirstMessage(control: AbstractControl): string | null {
-    if (!this.hasControlMessages(control)) {
+  getControlFirstMessage(control: AbstractControl<any, any>): string | null {
+    if (!control || !control.errors || !this.hasControlMessages(control)) {
       return null;
     }
 
-    const firstValidationRule = this.getControlRules(control)[0];
-    return control.errors._messages[firstValidationRule];
+    const rules = this.getControlRules(control);
+    if (rules && rules.length) {
+      const firstValidationRule = rules[0];
+      const messages = control.errors['_messages'];
+      return messages[firstValidationRule];
+    }
+    return null;
   }
 
-  getControlAllMessages(control: AbstractControl, separator: string = ' '): string | null {
-    if (!this.hasControlMessages(control)) {
+  getControlAllMessages(control: AbstractControl<any, any>, separator: string = ' '): string | null {
+    if (!control || !control.errors || !this.hasControlMessages(control)) {
       return null;
     }
 
     let message = '';
+    const messages = control.errors['_messages'];
 
-    this.getControlRules(control).forEach((rule) => {
-      message += control.errors._messages[rule] + separator;
+    this.getControlRules(control)?.forEach((rule) => {
+      message += messages[rule] + separator;
     });
 
     return message;
   }
 
-  getRuleMessage(control: AbstractControl, ruleName: string): string {
+  getRuleMessage(control: AbstractControl<any, any>, ruleName: string): string | null | undefined {
+    if (!control || !control.errors) return null;
+
     const rule = control.errors[ruleName];
     const ruleParameters = Object.keys(rule);
 
@@ -75,37 +88,39 @@ export class ValidationService {
 
     ruleParameters.forEach((parameter) => {
       const token = '${' + parameter + '}';
-      message = message.replace(token, rule[parameter]);
+      message = message?.replace(token, rule[parameter]);
     });
 
     return message;
   }
 
-  clearControlMessages(control: AbstractControl) {
-    control.errors._messages = {};
+  clearControlMessages(control: AbstractControl<any, any>) {
+    if (control.errors)
+      control.errors['_messages'] = {};
   }
 
-  getControlRules(control: AbstractControl): string[] | null {
-    return Object.keys(control.errors).filter((key) => key !== '_messages');
+  getControlRules(control: AbstractControl<any, any>): string[] | null {
+    return control.errors && Object.keys(control.errors).filter((key) => key !== '_messages');
   }
 
-  isControlInvalid(control: AbstractControl): boolean {
+  isControlInvalid(control: AbstractControl<any, any>): boolean {
     return control.invalid && (control.dirty || control.touched);
   }
 
-  isControlValid(control: AbstractControl): boolean {
+  isControlValid(control: AbstractControl<any, any>): boolean {
     return !this.isControlInvalid(control);
   }
 
-  hasControlMessages(control: AbstractControl): boolean {
+  hasControlMessages(control: AbstractControl<any, any>): boolean {
     return (
       control.errors &&
       control.errors.hasOwnProperty('_messages') &&
-      Object.keys(control.errors._messages).length > 0
-    );
+      control.errors['_messages'] &&
+      Object.keys(control.errors['_messages']).length > 0
+    ) ?? false;
   }
 
-  validateControl(control: AbstractControl) {
+  validateControl(control: AbstractControl<any, any>) {
     if (!control.errors) {
       return;
     }
@@ -113,9 +128,12 @@ export class ValidationService {
     // Prevent keeping non relevant messages from previous validation
     this.clearControlMessages(control);
 
-    this.getControlRules(control).forEach((rule) => {
-      control.errors._messages[rule] = this.getRuleMessage(control, rule);
-    });
+    const messages = control.errors['_messages'];
+
+    if (messages)
+      this.getControlRules(control)?.forEach((rule) => {
+        messages[rule] = this.getRuleMessage(control, rule);
+      });
   }
 
   validateAllControls(formGroup: UntypedFormGroup) {
@@ -139,26 +157,23 @@ export class ValidationService {
     });
   }
 
-  private findRuleMessage(control: AbstractControl, ruleName: string): string {
+  private findRuleMessage(control: AbstractControl, ruleName: string): string | undefined {
     const controlName = this.getFullControlName(control);
-    const hasControlCustomMessage =
-      this.customMessages &&
-      this.customMessages[controlName] &&
-      this.customMessages[controlName][ruleName];
-    const hasFormCustomMessage = this.customMessages && this.customMessages[ruleName];
 
-    if (hasControlCustomMessage) {
+    if (this.customMessages &&
+      this.customMessages[controlName] &&
+      this.customMessages[controlName][ruleName]) {
       return this.customMessages[controlName][ruleName];
     }
 
-    if (hasFormCustomMessage) {
+    if (this.customMessages && this.customMessages[ruleName]) {
       return this.customMessages[ruleName];
     }
 
     const langTranslation = this.validationTranslateService.getTranslation(ruleName);
 
     if (langTranslation) {
-      return this.validationTranslateService.getTranslation(ruleName).translation;
+      return this.validationTranslateService.getTranslation(ruleName)?.translation;
     }
 
     return ruleName;

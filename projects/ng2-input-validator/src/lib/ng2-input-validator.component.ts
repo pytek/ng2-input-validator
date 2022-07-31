@@ -20,18 +20,23 @@ import { ValidationService } from './services/validation.service';
 })
 export class Ng2InputValidatorComponent {
   @Input()
-  control: AbstractControl;
+  control: AbstractControl<any, any> | null = null;
   @Input()
-  class: string;
+  class: string = '';
 
-  constructor(private validationService: ValidationService) {}
+  constructor(private validationService: ValidationService) { }
 
   get invalid(): boolean {
+    if (!this.control) return false;
     return this.validationService.isControlInvalid(this.control);
   }
 
-  get message(): string {
-    this.validationService.validateControl(this.control);
-    return this.validationService.getControlFirstMessage(this.control);
+  get message(): string | null {
+    if (this.control) {
+      this.validationService.validateControl(this.control);
+      return this.validationService.getControlFirstMessage(this.control);
+    }
+
+    return null;
   }
 }

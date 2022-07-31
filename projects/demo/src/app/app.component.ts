@@ -9,7 +9,7 @@ import { ValidationTranslateService } from 'projects/ng2-input-validator/src/pub
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  currentLang: string;
+  currentLang: string = 'en';
 
   constructor(
     private translateService: TranslateService,

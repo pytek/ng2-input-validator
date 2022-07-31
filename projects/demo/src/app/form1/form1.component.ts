@@ -15,7 +15,7 @@ export class Form1Component implements OnInit {
   constructor(
     public form: Ng2Form,
     private translateService: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.buildForm();
@@ -47,7 +47,7 @@ export class Form1Component implements OnInit {
     });
   }
 
-  buildTagsForm(text: string = null): UntypedFormGroup {
+  buildTagsForm(text: string | null = null): UntypedFormGroup {
     return this.form.groupFormBuilder({
       text: [text, Validators.required]
     });
