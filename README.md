@@ -6,6 +6,7 @@ This is the Reactive Form wrapper to Angular 2+ FormGroup (https://angular.io/ap
 
 | Angular          | ng2iv-validator |
 |------------------|:---------------:|
+| >=13.0.0 <14.0.0 |      v13.x      |
 | >=12.0.0 <13.0.0 |      v12.x      |
 | >=11.0.0 <12.0.0 |      v11.x      |
 | >=10.0.0 <11.0.0 |      v10.x      |
