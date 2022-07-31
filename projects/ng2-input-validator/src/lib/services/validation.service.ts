@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { FormMessagesModel } from '../models/form-messages.model';
 import { ValidationTranslateService } from './validation-translate.service';
@@ -10,7 +10,7 @@ import { ValidationTranslateService } from './validation-translate.service';
 export class ValidationService {
   private customMessages: FormMessagesModel;
 
-  constructor(private validationTranslateService: ValidationTranslateService) {}
+  constructor(private validationTranslateService: ValidationTranslateService) { }
 
   setCustomMessages(messages: FormMessagesModel) {
     this.customMessages = Object.assign({}, this.customMessages, messages);
@@ -22,7 +22,7 @@ export class ValidationService {
   }
 
   getControlNameHierarchy(names: string[], control: AbstractControl): string | null {
-    if (control.parent.parent instanceof FormArray) {
+    if (control.parent.parent instanceof UntypedFormArray) {
       names.push(this.getControlName(control));
       return this.getControlNameHierarchy(names, control.parent);
     } else if (!control.parent.parent) {
@@ -118,21 +118,21 @@ export class ValidationService {
     });
   }
 
-  validateAllControls(formGroup: FormGroup) {
+  validateAllControls(formGroup: UntypedFormGroup) {
     formGroup.markAsTouched({ onlySelf: true });
 
     Object.keys(formGroup.controls).forEach((controlName) => {
       const control = formGroup.get(controlName);
 
-      if (control instanceof FormControl) {
+      if (control instanceof UntypedFormControl) {
         control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
+      } else if (control instanceof UntypedFormGroup) {
         this.validateAllControls(control);
         control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormArray) {
+      } else if (control instanceof UntypedFormArray) {
         // tslint:disable-next-line:forin
         for (const controlIndex in control.controls) {
-          this.validateAllControls((control.controls as FormGroup[])[controlIndex]);
+          this.validateAllControls((control.controls as UntypedFormGroup[])[controlIndex]);
         }
         control.markAsTouched({ onlySelf: true });
       }

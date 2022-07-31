@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormGroup, FormArray } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormArray } from '@angular/forms';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Ng2Form } from 'projects/ng2-input-validator/src/public-api';
@@ -47,14 +47,14 @@ export class Form1Component implements OnInit {
     });
   }
 
-  buildTagsForm(text: string = null): FormGroup {
+  buildTagsForm(text: string = null): UntypedFormGroup {
     return this.form.groupFormBuilder({
       text: [text, Validators.required]
     });
   }
 
-  get tags(): FormArray {
-    return <FormArray>this.form.getByPath('tags');
+  get tags(): UntypedFormArray {
+    return <UntypedFormArray>this.form.getByPath('tags');
   }
 
   removeTag(i: number): void {

@@ -1,4 +1,4 @@
-import { AbstractControl, FormArray } from '@angular/forms';
+import { AbstractControl, UntypedFormArray } from '@angular/forms';
 
 export class TagValidator {
   public static unique(
@@ -7,7 +7,7 @@ export class TagValidator {
     const uniqueNames = [];
     let isValid = true;
 
-    if (control instanceof FormArray) {
+    if (control instanceof UntypedFormArray) {
       control.controls.forEach((subControl) => {
         const text = subControl.value.text;
 

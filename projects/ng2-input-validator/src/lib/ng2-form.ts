@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
-  FormArray,
-  FormBuilder,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
@@ -16,9 +16,9 @@ import { ValidationService } from './services/validation.service';
 
 @Injectable()
 export class Ng2Form {
-  private form: FormGroup;
+  private form: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder, private validationService: ValidationService) {}
+  constructor(private formBuilder: UntypedFormBuilder, private validationService: ValidationService) {}
 
   get valueChanges(): Observable<any> {
     return this.form.valueChanges;
@@ -28,7 +28,7 @@ export class Ng2Form {
     return this.form.value;
   }
 
-  get formGroup(): FormGroup {
+  get formGroup(): UntypedFormGroup {
     return this.form;
   }
 
@@ -40,8 +40,8 @@ export class Ng2Form {
     return this.form.controls;
   }
 
-  getFormGroupInsideArray(arrayName: string, index: number): FormGroup {
-    return (this.form.controls[arrayName] as FormArray).controls[index] as FormGroup;
+  getFormGroupInsideArray(arrayName: string, index: number): UntypedFormGroup {
+    return (this.form.controls[arrayName] as UntypedFormArray).controls[index] as UntypedFormGroup;
   }
 
   getControlsInArray(arrayName: string, index: number): { [key: string]: AbstractControl } {
@@ -63,7 +63,7 @@ export class Ng2Form {
   groupFormBuilder(
     controlsConfig: { [key: string]: any },
     extra?: { [key: string]: any } | null
-  ): FormGroup {
+  ): UntypedFormGroup {
     return this.formBuilder.group(controlsConfig, extra);
   }
 
@@ -136,7 +136,7 @@ export class Ng2Form {
     return this.form.getRawValue();
   }
 
-  get parent(): FormGroup | FormArray {
+  get parent(): UntypedFormGroup | UntypedFormArray {
     return this.form.parent;
   }
 
@@ -228,7 +228,7 @@ export class Ng2Form {
     this.form.enable(opts);
   }
 
-  setParent(parent: FormGroup | FormArray): void {
+  setParent(parent: UntypedFormGroup | UntypedFormArray): void {
     this.form.setParent(parent);
   }
 

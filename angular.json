@@ -165,6 +165,5 @@
     }},
   "cli": {
     "analytics": false
-  },
-  "defaultProject": "ng2-input-validator"
+  }
 }
